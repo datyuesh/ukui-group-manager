@@ -25,3 +25,24 @@ HEADERS += \
     group_manager_client.h
 SOURCES += main.cpp \
     group_manager_client.cpp
+
+system_head.path  =  /usr/include/ukui-group-manager
+system_head.files += custom_struct.h \
+                     group_manager_client.h
+
+INSTALLS += system_head
+
+target.path = /usr/lib/x86_64-linux-gnu/ukui-group-manager/
+INSTALLS    +=   target
+
+
+system_lib.path  =  /usr/lib/x86_64-linux-gnu/ukui-group-manager/
+system_lib.files += libgroup-manager-client.so.1.0.0    \
+                    libgroup-manager-client.so.1        \
+                    libgroup-manager-client.so.1.0      \
+                    libgroup-manager-client.so
+
+INSTALLS    +=   system_lib
+
+
+
