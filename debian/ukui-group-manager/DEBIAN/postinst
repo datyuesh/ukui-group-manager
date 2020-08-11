@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# 启动服务
+systemctl enable ukui-group-manager.service
+systemctl start  ukui-group-manager.service
+

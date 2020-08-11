@@ -1,0 +1,9 @@
+Package: ukui-group-manager
+Version: 0.0.1kord
+Architecture: amd64
+Maintainer: yue_shuai <yueshuai@kylinos.cn>
+Installed-Size: 72
+Depends: libc6 (>= 2.4), libgcc-s1 (>= 3.0), libqt5core5a (>= 5.12.2), libqt5dbus5 (>= 5.0.2), libstdc++6 (>= 5)
+Section: universe/admin
+Priority: optional
+Description: development interface for ukui-control-center
