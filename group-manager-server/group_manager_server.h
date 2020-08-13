@@ -16,19 +16,15 @@ public:
 
 public slots:
     QVariantList get();
-    bool add(QString groupName, QString groupId);
-    bool set(QString groupName,QString groupId);
-    bool del(QString groupName,QString groupId);
+    bool add(QString groupName, QString groupId, QString userName);
+    bool set(QString groupName, QString groupId, QString userName);
+    bool del(QString groupName, QString groupId, QString userName);
+    bool addUserToGroup(QString groupName, QString groupId, QString userName);
+    bool delUserFromGroup(QString groupName, QString groupId, QString userName);
 
 private:
-	int dbus_integer;
-	QString dbus_string;
-	QVariant dbus_variant;
     QList<custom_struct> value;
 
 signals:
     void message();
-    void message_2();
-    void message_3();
-
 };

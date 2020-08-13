@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
     group_manager_server *dbus_demo = new group_manager_server();
     new InterfaceAdaptor(dbus_demo);
     connection.registerObject("/org/ukui/groupmanager", dbus_demo);
-//    QDBusMessage msg = QDBusMessage::createSignal("/org/ukui/groupmanager", "org.ukui.groupmanager.interface", "message");
-//    QDBusConnection::sessionBus().send(msg);
+    QDBusMessage msg = QDBusMessage::createSignal("/org/ukui/groupmanager", "org.ukui.groupmanager.interface", "message");
+    QDBusConnection::systemBus().send(msg);
 	return a.exec();	
 }

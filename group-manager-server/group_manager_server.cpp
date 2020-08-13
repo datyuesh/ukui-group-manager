@@ -33,14 +33,14 @@ QVariantList group_manager_server::get()
         qDebug() << "以: 分割" <<lineList.at(0) << lineList.at(1) << lineList.at(2);
         line = in.readLine();
 
-        //demo[lineCount].drv_ID    = lineList.at(2);
-        demo[lineCount].name      = lineList.at(0);
-        demo[lineCount].full_name = lineList.at(2);
-        //demo[i].notify_mid = lineList.at(1);
+        demo[lineCount].groupname      = lineList.at(0);
+        demo[lineCount].passphrase    = lineList.at(1);
+        demo[lineCount].groupid = lineList.at(2);
+        demo[lineCount].usergroup = lineList.at(3);
         cnt = QVariant::fromValue(demo[lineCount]);
         value << cnt;
-        //            qDebug() << "以: 分割111" << value.at(0) << lineList.at(1) << lineList.at(2);
-        qDebug() << "以: 分割111" << demo[lineCount].name << demo[lineCount].full_name;
+        qDebug() << "以: 分割111" << demo[lineCount].groupname << demo[lineCount].groupid
+                 << demo[lineCount].passphrase << demo[lineCount].usergroup;
 
         lineCount ++;
     }
@@ -49,8 +49,9 @@ QVariantList group_manager_server::get()
 }
 
 // 添加组
-bool group_manager_server::add(QString groupName,QString groupId)
+bool group_manager_server::add(QString groupName, QString groupId, QString userName)
 {
+    Q_UNUSED(userName);
     qDebug()<<"add";
     QString groupadd = "/usr/sbin/groupadd";
     QString addgroup = "/usr/sbin/addgroup";
@@ -88,8 +89,9 @@ bool group_manager_server::add(QString groupName,QString groupId)
 }
 
 // 修改组
-bool group_manager_server::set(QString groupName,QString groupId)
+bool group_manager_server::set(QString groupName, QString groupId, QString userName)
 {
+    Q_UNUSED(userName);
     qDebug()<<"set";
     QString groupmod = "/usr/sbin/groupmod";
 
@@ -116,9 +118,10 @@ bool group_manager_server::set(QString groupName,QString groupId)
 }
 
 // 删除组
-bool group_manager_server::del(QString groupName,QString groupId)
+bool group_manager_server::del(QString groupName, QString groupId, QString userName)
 {
     Q_UNUSED(groupId);
+    Q_UNUSED(userName);
     qDebug()<<"del";
     QString groupdel = "/usr/sbin/groupdel";
 
@@ -140,4 +143,77 @@ bool group_manager_server::del(QString groupName,QString groupId)
     qDebug()<<QString::fromLocal8Bit(p.readAllStandardError());
     return true;
 }
+
+// 添加用户到组
+bool group_manager_server::addUserToGroup(QString groupName, QString groupId, QString userName)
+{
+    Q_UNUSED(groupId);
+    qDebug() << "addUserToGroup";
+    QString usermod = "/usr/sbin/usermod";
+    QString gpasswd = "/usr/bin/gpasswd";
+    QString command;
+
+    QFile usermodFile(usermod);
+    QFile gpasswdFile(gpasswd);
+
+    QProcess p(0);
+    QStringList args;
+
+    if(!usermodFile.exists()){
+        printf("/usr/sbin/usermod file not exist \n");
+        if(!gpasswdFile.exists()){
+            printf("/usr/sbin/gpasswd file not exist \n");
+            return false;
+        }
+        qDebug()<<"gpasswd";
+        command = gpasswd;
+        args.append("-a");
+        args.append(userName);
+        args.append(groupName);
+    } else {
+        qDebug()<<"usermod";
+        command = usermod;
+        args.append("-G");
+        args.append(groupName);
+        args.append(userName);
+    }
+
+    p.execute(command,args);//command是要执行的命令,args是参数
+    qDebug()<<"wait for finish";
+    p.waitForFinished(-1);
+    qDebug()<<QString::fromLocal8Bit(p.readAllStandardError());
+    return true;
+}
+
+// 删除用户从组
+bool group_manager_server::delUserFromGroup(QString groupName, QString groupId, QString userName)
+{
+    Q_UNUSED(groupId);
+    qDebug() << "delUserFromGroup";
+    QString gpasswd = "/usr/bin/gpasswd";
+    QString command;
+
+    QFile gpasswdFile(gpasswd);
+
+    QProcess p(0);
+    QStringList args;
+
+    if(!gpasswdFile.exists()){
+        printf("/usr/sbin/gpasswd file not exist \n");
+        return false;
+    }
+    qDebug()<<"gpasswd";
+    command = gpasswd;
+    args.append("-d");
+    args.append(userName);
+    args.append(groupName);
+
+    p.execute(command,args);//command是要执行的命令,args是参数
+    qDebug() << "wait for finish";
+    p.waitForFinished(-1);
+    qDebug() << QString::fromLocal8Bit(p.readAllStandardError());
+    return true;
+}
+
+
 

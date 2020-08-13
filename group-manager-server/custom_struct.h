@@ -5,15 +5,15 @@
 #define	CUSTOM_STRUCT
 struct custom_struct
 {
-    int drv_ID;
-    QString name;
-    QString full_name;
-    int notify_mid;
+    QString groupname;
+    QString passphrase;
+    QString groupid;
+    QString usergroup;
 
     friend QDBusArgument &operator<<(QDBusArgument &argument, const custom_struct&mystruct)
     {
         argument.beginStructure();
-        argument << mystruct.drv_ID << mystruct.name << mystruct.full_name << mystruct.notify_mid;
+        argument << mystruct.groupname << mystruct.passphrase << mystruct.groupid << mystruct.usergroup;
         argument.endStructure();
         return argument;
     }
@@ -21,7 +21,7 @@ struct custom_struct
     friend const QDBusArgument &operator>>(const QDBusArgument &argument, custom_struct&mystruct)
     {
         argument.beginStructure();
-        argument >> mystruct.drv_ID >> mystruct.name >> mystruct.full_name >> mystruct.notify_mid;
+        argument >> mystruct.groupname >> mystruct.passphrase >> mystruct.groupid >> mystruct.usergroup;
         argument.endStructure();
         return argument;
     }

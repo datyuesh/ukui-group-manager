@@ -7,10 +7,12 @@ int main(int argc, char *argv[])
 	
     qRegisterMetaType<custom_struct>("custom_struct");
     qDBusRegisterMetaType<custom_struct>();
+//    qRegisterMetaType<name>("name");
+//    qDBusRegisterMetaType<name>();
 
     group_manager_client demo;
 
-    demo.do_commit_async("add","xcxc","1011");
+    //demo.do_commit_async("add","xcxc","1011");
 
 	return a.exec();
 }
