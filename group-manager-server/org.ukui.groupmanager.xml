@@ -8,30 +8,24 @@
       <arg type="b" direction="out"/>
       <arg name="groupName" type="s" direction="in"/>
       <arg name="groupId" type="s" direction="in"/>
-      <arg name="userName" type="s" direction="in"/>
     </method>
     <method name="set">
       <arg type="b" direction="out"/>
       <arg name="groupName" type="s" direction="in"/>
       <arg name="groupId" type="s" direction="in"/>
-      <arg name="userName" type="s" direction="in"/>
     </method>
     <method name="del">
       <arg type="b" direction="out"/>
       <arg name="groupName" type="s" direction="in"/>
-      <arg name="groupId" type="s" direction="in"/>
-      <arg name="userName" type="s" direction="in"/>
     </method>
     <method name="addUserToGroup">
       <arg type="b" direction="out"/>
       <arg name="groupName" type="s" direction="in"/>
-      <arg name="groupId" type="s" direction="in"/>
       <arg name="userName" type="s" direction="in"/>
     </method>
     <method name="delUserFromGroup">
       <arg type="b" direction="out"/>
       <arg name="groupName" type="s" direction="in"/>
-      <arg name="groupId" type="s" direction="in"/>
       <arg name="userName" type="s" direction="in"/>
     </method>
   </interface>

@@ -1,3 +1,21 @@
+/*
+* Copyright (C) 2020 Tianjin KYLIN Information Technology Co., Ltd.
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 3, or (at your option)
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+*
+*/
+
 #include "group_manager_server.h"
 #include "custom_struct.h"
 #include <stdio.h>
@@ -30,29 +48,21 @@ QVariantList group_manager_server::get()
 
     while(!line.isNull()){
         QStringList lineList = line.split(":");
-        qDebug() << "以: 分割" <<lineList.at(0) << lineList.at(1) << lineList.at(2);
         line = in.readLine();
-
         demo[lineCount].groupname      = lineList.at(0);
         demo[lineCount].passphrase    = lineList.at(1);
         demo[lineCount].groupid = lineList.at(2);
         demo[lineCount].usergroup = lineList.at(3);
         cnt = QVariant::fromValue(demo[lineCount]);
         value << cnt;
-        qDebug() << "以: 分割111" << demo[lineCount].groupname << demo[lineCount].groupid
-                 << demo[lineCount].passphrase << demo[lineCount].usergroup;
-
         lineCount ++;
     }
-
     return value;
 }
 
 // 添加组
-bool group_manager_server::add(QString groupName, QString groupId, QString userName)
+bool group_manager_server::add(QString groupName, QString groupId)
 {
-    Q_UNUSED(userName);
-    qDebug()<<"add";
     QString groupadd = "/usr/sbin/groupadd";
     QString addgroup = "/usr/sbin/addgroup";
     QString command;
@@ -67,13 +77,11 @@ bool group_manager_server::add(QString groupName, QString groupId, QString userN
         if(!groupaddFile.exists()){
             return false;
         }
-        qDebug()<<"groupadd";
         command = groupadd;
         args.append("-g");
         args.append(groupId);
         args.append(groupName);
     }else{
-        qDebug()<<"addgroup";
         command = addgroup;
         args.append("-gid");
         args.append(groupId);
@@ -82,21 +90,16 @@ bool group_manager_server::add(QString groupName, QString groupId, QString userN
 
 
     p.execute(command,args);//command是要执行的命令,args是参数
-    qDebug()<<"wait for finish";
     p.waitForFinished(-1);
-    qDebug()<<QString::fromLocal8Bit(p.readAllStandardError());
+//    qDebug()<<QString::fromLocal8Bit(p.readAllStandardError());
     return true;
 }
 
 // 修改组
-bool group_manager_server::set(QString groupName, QString groupId, QString userName)
+bool group_manager_server::set(QString groupName, QString groupId)
 {
-    Q_UNUSED(userName);
-    qDebug()<<"set";
     QString groupmod = "/usr/sbin/groupmod";
-
     QFile groupmodFile(groupmod);
-
     QProcess p(0);
     QStringList args;
 
@@ -104,29 +107,22 @@ bool group_manager_server::set(QString groupName, QString groupId, QString userN
         printf("/usr/sbin/groupmod file not exist \n");
         return false;
     }
-    qDebug()<<"groupmod";
     args.append("-g");
     args.append(groupId);
     //args.append("-n");
     args.append(groupName);
 
     p.execute(groupmod,args);//command是要执行的命令,args是参数
-    qDebug()<<"wait for finish";
     p.waitForFinished(-1);
-    qDebug()<<QString::fromLocal8Bit(p.readAllStandardError());
+//    qDebug()<<QString::fromLocal8Bit(p.readAllStandardError());
     return true;
 }
 
 // 删除组
-bool group_manager_server::del(QString groupName, QString groupId, QString userName)
+bool group_manager_server::del(QString groupName)
 {
-    Q_UNUSED(groupId);
-    Q_UNUSED(userName);
-    qDebug()<<"del";
     QString groupdel = "/usr/sbin/groupdel";
-
     QFile groupdelFile(groupdel);
-
     QProcess p(0);
     QStringList args;
 
@@ -134,21 +130,17 @@ bool group_manager_server::del(QString groupName, QString groupId, QString userN
         printf("/usr/sbin/groupdel file not exist \n");
         return false;
     }
-    qDebug()<<"groupdel";
     args.append(groupName);
 
     p.execute(groupdel,args);//command是要执行的命令,args是参数
-    qDebug()<<"wait for finish";
     p.waitForFinished(-1);
-    qDebug()<<QString::fromLocal8Bit(p.readAllStandardError());
+//    qDebug()<<QString::fromLocal8Bit(p.readAllStandardError());
     return true;
 }
 
 // 添加用户到组
-bool group_manager_server::addUserToGroup(QString groupName, QString groupId, QString userName)
+bool group_manager_server::addUserToGroup(QString groupName, QString userName)
 {
-    Q_UNUSED(groupId);
-    qDebug() << "addUserToGroup";
     QString usermod = "/usr/sbin/usermod";
     QString gpasswd = "/usr/bin/gpasswd";
     QString command;
@@ -165,31 +157,25 @@ bool group_manager_server::addUserToGroup(QString groupName, QString groupId, QS
             printf("/usr/sbin/gpasswd file not exist \n");
             return false;
         }
-        qDebug()<<"gpasswd";
         command = gpasswd;
         args.append("-a");
         args.append(userName);
         args.append(groupName);
     } else {
-        qDebug()<<"usermod";
         command = usermod;
         args.append("-G");
         args.append(groupName);
         args.append(userName);
     }
-
     p.execute(command,args);//command是要执行的命令,args是参数
-    qDebug()<<"wait for finish";
     p.waitForFinished(-1);
-    qDebug()<<QString::fromLocal8Bit(p.readAllStandardError());
+//    qDebug()<<QString::fromLocal8Bit(p.readAllStandardError());
     return true;
 }
 
 // 删除用户从组
-bool group_manager_server::delUserFromGroup(QString groupName, QString groupId, QString userName)
+bool group_manager_server::delUserFromGroup(QString groupName, QString userName)
 {
-    Q_UNUSED(groupId);
-    qDebug() << "delUserFromGroup";
     QString gpasswd = "/usr/bin/gpasswd";
     QString command;
 
@@ -202,18 +188,13 @@ bool group_manager_server::delUserFromGroup(QString groupName, QString groupId, 
         printf("/usr/sbin/gpasswd file not exist \n");
         return false;
     }
-    qDebug()<<"gpasswd";
     command = gpasswd;
     args.append("-d");
     args.append(userName);
     args.append(groupName);
 
     p.execute(command,args);//command是要执行的命令,args是参数
-    qDebug() << "wait for finish";
     p.waitForFinished(-1);
-    qDebug() << QString::fromLocal8Bit(p.readAllStandardError());
+//    qDebug() << QString::fromLocal8Bit(p.readAllStandardError());
     return true;
 }
-
-
-

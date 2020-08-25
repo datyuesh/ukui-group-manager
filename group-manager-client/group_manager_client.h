@@ -1,3 +1,21 @@
+/*
+* Copyright (C) 2020 Tianjin KYLIN Information Technology Co., Ltd.
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 3, or (at your option)
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, see <http://www.gnu.org/licenses/&gt;.
+*
+*/
+
 #include <QObject>
 #include <QDBusInterface>
 #include <QDBusPendingCallWatcher>
@@ -13,38 +31,6 @@ public:
     //void check_permission();
     QList<custom_struct *> *get_group_info();
     void do_commit_async(QString method, QString groupName, QString groupId, QString userName);
-
-//    friend QDBusArgument &operator<<(QDBusArgument &argument, const QMap<QString, QString> &map)
-//    {
-//        int kid = qMetaTypeId<QString>();
-//        int vid = qMetaTypeId<QString>();
-//        argument.beginMap(kid, vid);
-//        typename QMap<QString, QString>::ConstIterator it = map.constBegin();
-//        typename QMap<QString, QString>::ConstIterator end = map.constEnd();
-//        for ( ; it != end; ++it) {
-//            argument.beginMapEntry();
-//            argument << it.key() << it.value();
-//            argument.endMapEntry();
-//        }
-//        argument.endMap();
-//        return argument;
-//    }
-
-//    friend const QDBusArgument &operator>>(const QDBusArgument &argument, QMap<QString, QString> &map)
-//    {
-//        argument.beginMap();
-//        map.clear();
-//        while (!argument.atEnd()) {
-//            QString key;
-//            QString value;
-//            argument.beginMapEntry();
-//            argument >> key >> value;
-//            map.insertMulti(key, value);
-//            argument.endMapEntry();
-//        }
-//        argument.endMap();
-//        return argument;
-//    }
 
 private:
 	void ConnectToService();
